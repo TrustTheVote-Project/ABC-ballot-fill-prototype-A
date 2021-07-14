@@ -33,6 +33,7 @@ private const val TAG = "OpenDocumentFragment"
 
 private const val FILENAME = "part1"
 private const val EXT = ".pdf"
+private const val FILL_TEXT = "Abigail Adams"
 //private const val FILENAME = "awesomeBallot.pdf"
 //private const val FILENAME = "awesomeBallot (1).pdf"
 //private const val INITIAL_PAGE_INDEX = 0
@@ -119,6 +120,18 @@ class MainFragment : Fragment() {
                 it.value?.setValue("Off")
             }
         }
+
+        val textFields = fields.filter { field ->
+            if (field.value == null) return@filter false
+            if (field.value.formType == null) return@filter false
+//            Log.d(TAG, field.value.formType.value)
+            if (PdfName.Tx != field.value.formType) return@filter false
+            true
+        }
+        textFields.forEach { field ->
+            field.value?.setValue(if (check) FILL_TEXT else "")
+        }
+
         pdfDoc.close()
         d.close()
 
